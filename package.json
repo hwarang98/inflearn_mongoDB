@@ -1,0 +1,26 @@
+{
+  "name": "inflearn_mongodb",
+  "version": "1.0.0",
+  "description": "mongoDB 강의",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemone server.js",
+    "dev": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hwarang98/inflearn_mongoDB.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hwarang98/inflearn_mongoDB/issues"
+  },
+  "homepage": "https://github.com/hwarang98/inflearn_mongoDB#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "nodemon": "^2.0.20"
+  }
+}
