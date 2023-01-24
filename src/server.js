@@ -11,7 +11,8 @@ const MONGO_URL =
 
 const server = async () => {
   try {
-    mongoose.set('strictQuery', true);
+    mongoose.set('strictQuery', false);
+    mongoose.set('debug', true);
     await mongoose.connect(MONGO_URL);
     console.log('MongoDB 연결 성공');
     app.use(Express.json());
@@ -77,17 +78,25 @@ const server = async () => {
     app.patch('/user/:userId', async (req, res) => {
       try {
         const { userId } = req.params;
-        const { age } = req.body;
-        if (!mongoose.isValidObjectId(userId) || typeof age === 'string') {
-          return res.status(400).send({ error: '입력값을 확인해 주세요.' });
+        const { age, name } = req.body;
+
+        if (!mongoose.isValidObjectId(userId)) return res.status(400).send({ error: '입력값을 확인해 주세요.' });
+
+        if (!age && !name) return res.status(400).send({ err: '나이 또는 이름을 입력해주세요' });
+
+        if (age && typeof age !== 'number') return res.status(400).send({ err: 'age는 숫자여야 합니다.' });
+
+        if (name && typeof name.first !== 'string' && typeof name.last !== 'string') {
+          return res.status(400).send({ err: '성 또는 이름을 입력해 주세요.' });
         }
 
-        console.log(typeof age);
-        const user = await User.findByIdAndUpdate(
-          userId,
-          { $set: { age } },
-          { new: true }
-        );
+        let updateBody = {};
+        if (age) updateBody.age = age;
+        if (name) updateBody.name = name;
+
+        const user = await User.findByIdAndUpdate(userId, updateBody, {
+          new: true,
+        });
         return res.send(user);
       } catch (error) {
         console.log(error);
