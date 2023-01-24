@@ -1,6 +1,7 @@
 import Express from 'express';
 import mongoose from 'mongoose';
 import userRouter from './routers/userRouter.js';
+import blogRouter from './routers/blogRouter.js';
 
 const app = Express();
 const port = 3000;
@@ -17,6 +18,7 @@ const server = async () => {
     app.use(Express.json());
 
     app.use('/user', userRouter);
+    app.use('/blog', blogRouter);
 
     app.listen(port, () => {
       console.log(`server listening on port ${port}`);
