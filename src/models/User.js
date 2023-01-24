@@ -2,7 +2,7 @@ import { Schema, model } from 'mongoose';
 
 const UsetScheam = new Schema(
   {
-    username: { type: String, require: true },
+    username: { type: String, require: true, unique: true },
     name: {
       first: { type: String, require: true },
       last: { type: String, require: true },
