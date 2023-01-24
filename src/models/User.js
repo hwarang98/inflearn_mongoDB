@@ -2,10 +2,10 @@ import { Schema, model } from 'mongoose';
 
 const UsetScheam = new Schema(
   {
-    username: { type: String, require: true, unique: true },
+    username: { type: String, required: true, unique: true },
     name: {
-      first: { type: String, require: true },
-      last: { type: String, require: true },
+      first: { type: String, required: true },
+      last: { type: String, required: true },
     },
     age: Number,
     email: String,
