@@ -1,11 +1,14 @@
 import mongoose from 'mongoose';
+import UserService from '../service/user.js';
 import User from '../models/User.js';
 
 export default {
   async getUser(req, res) {
     try {
-      const users = await User.find({});
-      return res.send({ users });
+      const user = new UserService();
+      const getAllusers = await user.getAllUser();
+
+      return res.send({ getAllusers });
     } catch (error) {
       console.log(error);
       return res.status(500).send({ error: error.message });
@@ -14,13 +17,14 @@ export default {
 
   async getParamsUser(req, res) {
     try {
+      const user = new UserService();
       const { userId } = req.params;
-      if (!mongoose.isValidObjectId(userId)) {
-        return res.status(400).send({ error: 'invaild userId' });
-      }
 
-      const user = await User.findOne({ _id: userId });
-      return res.send({ user });
+      const getUser = await user.getUser(userId);
+
+      if (getUser === null) return 'userId를 확인해주세요!';
+
+      return res.send({ getUser });
     } catch (error) {
       console.log(error);
       return res.status(500).send({ error: error.message });
@@ -48,14 +52,13 @@ export default {
 
   async deleteUser(req, res) {
     try {
+      const user = new UserService();
       const { userId } = req.params;
-      if (!mongoose.isValidObjectId(userId)) {
-        return res.status(400).send({ error: 'invaild userId' });
-      }
 
-      const user = await User.findOneAndDelete({ _id: Object(userId) });
+      const userDelete = await user.deleteUserById(userId);
+      if (userDelete === null) return 'userId를 확인해주세요.';
 
-      return res.send({ user });
+      return res.send({ userDelete });
     } catch (error) {
       console.log(error);
       return res.status(500).send({ error: error.message });
