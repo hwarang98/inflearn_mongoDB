@@ -16,8 +16,8 @@ const server = async () => {
     mongoose.set('debug', true);
     await mongoose.connect(MONGO_URL);
     console.log('MongoDB 연결 성공');
-    app.use(Express.json());
 
+    app.use(Express.json());
     app.use(router);
 
     app.listen(port, () => {
