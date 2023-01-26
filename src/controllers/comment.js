@@ -1,13 +1,15 @@
 import mongoose from 'mongoose';
 import CommentService from '../service/comment.js';
-import Comment from '../models/Comment.js';
-import User from '../models/User.js';
-import Blog from '../models/Blog.js';
+import { UserScheam, BlogScheam, CommentScheam } from '../models/index.js';
 import { isValidObjectId } from 'mongoose';
 
 export default {
   async getComment(req, res) {
-    return res.send(req.params);
+    const { blogId } = req.params;
+    if (!isValidObjectId(blogId)) return res.status(400).send({ error: 'blogId를 확인해주세요.' });
+    console.log(req.params);
+    const comments = await CommentScheam.find({ blog: blogId });
+    return res.send({ comments });
   },
 
   async postBlog(req, res) {
@@ -19,13 +21,13 @@ export default {
       if (typeof content !== 'string') return res.status(400).send({ error: 'content를 확인해주세요.' });
 
       const [blog, user] = await Promise.all([
-        await Blog.findByIdAndUpdate(blogId),
-        await User.findByIdAndUpdate(userId),
+        await BlogScheam.findByIdAndUpdate(blogId),
+        await UserScheam.findByIdAndUpdate(userId),
       ]);
 
       if (!blog || !user) return res.status(400).send({ error: 'blog or user가 없습니다.' });
-      if (!blog.isLive) res.status(400).send({ error: 'blog가 비공개 되어있습니다.' });
-      const comment = new Comment({ content, user, blog });
+      if (!blog.isLive) return res.status(400).send({ error: 'blog가 비공개 되어있습니다.' });
+      const comment = new CommentScheam({ content, user, blog });
       comment.save();
       return res.send({ comment });
     } catch (error) {
