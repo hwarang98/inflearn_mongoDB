@@ -1,7 +1,6 @@
 import mongoose from 'mongoose';
 import UserService from '../service/user.js';
 import { UserScheam, BlogScheam } from '../models/index.js';
-import User from '../models/User.js';
 
 export default {
   async getUser(req, res) {
