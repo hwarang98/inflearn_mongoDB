@@ -1,8 +1,7 @@
 import Express from 'express';
 import mongoose from 'mongoose';
-import userRouter from './routers/userRouter.js';
-import blogRouter from './routers/blogRouter.js';
 import router from './routers/index.js';
+import generateFakeData from '../faker.js';
 
 const app = Express();
 const port = 8080;
@@ -15,6 +14,9 @@ const server = async () => {
     mongoose.set('strictQuery', false);
     mongoose.set('debug', true);
     await mongoose.connect(MONGO_URL);
+
+    // 목업 데이터 db save
+    // await generateFakeData(100, 10, 300);
     console.log('MongoDB 연결 성공');
 
     app.use(Express.json());
