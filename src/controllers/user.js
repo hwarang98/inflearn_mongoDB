@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import UserService from '../service/user.js';
+import { UserScheam, BlogScheam } from '../models/index.js';
 import User from '../models/User.js';
 
 export default {
@@ -41,7 +42,7 @@ export default {
         return res.status(400).send({ err: '성 or 이름을 입력해주세요.' });
       }
 
-      const user = new User(req.body);
+      const user = new UserScheam(req.body);
       await user.save();
       return res.send({ user });
     } catch (error) {
@@ -70,24 +71,17 @@ export default {
       const { userId } = req.params;
       const { age, name } = req.body;
 
-      if (!mongoose.isValidObjectId(userId))
-        return res.status(400).send({ error: '입력값을 확인해 주세요.' });
+      if (!mongoose.isValidObjectId(userId)) return res.status(400).send({ error: '입력값을 확인해 주세요.' });
 
-      if (!age && !name)
-        return res.status(400).send({ err: '나이 또는 이름을 입력해주세요' });
+      if (!age && !name) return res.status(400).send({ err: '나이 또는 이름을 입력해주세요' });
 
-      if (age && typeof age !== 'number')
-        return res.status(400).send({ err: 'age는 숫자여야 합니다.' });
+      if (age && typeof age !== 'number') return res.status(400).send({ err: 'age는 숫자여야 합니다.' });
 
-      if (
-        name &&
-        typeof name.first !== 'string' &&
-        typeof name.last !== 'string'
-      ) {
+      if (name && typeof name.first !== 'string' && typeof name.last !== 'string') {
         return res.status(400).send({ err: '성 또는 이름을 입력해 주세요.' });
       }
 
-      let user = await User.findById(userId);
+      let user = await UserScheam.findById(userId);
       console.log({ userBeforeEdit: user });
       if (age) user.age = age;
       if (name) user.name = name;
