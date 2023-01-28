@@ -4,7 +4,9 @@ import { UserScheam, BlogScheam } from '../models/index.js';
 export default {
   async getAllBlog(req, res) {
     try {
-      const blog = await BlogScheam.find({}).limit(10);
+      const blog = await BlogScheam.find({})
+        .limit(20)
+        .populate([{ path: 'user' }, { path: 'comments', populate: { path: 'user' } }]);
       return res.send({ blog });
     } catch (error) {
       console.log(error);
