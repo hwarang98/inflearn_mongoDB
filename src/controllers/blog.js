@@ -4,7 +4,7 @@ import { UserScheam, BlogScheam } from '../models/index.js';
 export default {
   async getAllBlog(req, res) {
     try {
-      const blog = await BlogScheam.find({});
+      const blog = await BlogScheam.find({}).limit(10);
       return res.send({ blog });
     } catch (error) {
       console.log(error);

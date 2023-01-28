@@ -8,7 +8,7 @@ export default {
     const { blogId } = req.params;
     if (!isValidObjectId(blogId)) return res.status(400).send({ error: 'blogId를 확인해주세요.' });
     console.log(req.params);
-    const comments = await CommentScheam.find({ blog: blogId });
+    const comments = await CommentScheam.find({ blog: blogId }).limit(1);
     return res.send({ comments });
   },
 
