@@ -24,7 +24,7 @@ export default {
 
       if (!blog || !user) return res.status(400).send({ error: 'blog or user가 없습니다.' });
       if (!blog.isLive) return res.status(400).send({ error: 'blog가 비공개 되어있습니다.' });
-      const comment = new CommentScheam({ content, user, blog });
+      const comment = new CommentScheam({ content, user, userFullName: `${user.name.first} ${user.name.last}`, blog });
 
       await Promise.all([comment.save(), Blog.updateOne({ _id: blogId }, { $push: { comments: comment } })]);
       return res.send({ comment });
