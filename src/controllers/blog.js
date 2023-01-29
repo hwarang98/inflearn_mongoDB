@@ -33,7 +33,7 @@ export default {
       const { title, content, isLive, userId } = req.body;
       if (typeof title !== 'string') res.status(400).send({ error: 'title을 입력해주세요.' });
       if (typeof content !== 'string') res.status(400).send({ error: 'content를 입력해주세요.' });
-      if (isLive && typeof isLive !== 'string') res.status(400).send({ error: 'isLive는 boolean 입니다.' });
+      if (isLive && typeof isLive !== 'boolean') res.status(400).send({ error: 'isLive는 boolean 입니다.' });
       if (!isValidObjectId(userId)) res.status(400).send({ error: 'ID를 확인해주세요.' });
 
       const user = await UserScheam.findById(userId);
