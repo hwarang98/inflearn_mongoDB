@@ -83,7 +83,10 @@ export default {
       let user = await UserScheam.findById(userId);
       console.log({ userBeforeEdit: user });
       if (age) user.age = age;
-      if (name) user.name = name;
+      if (name) {
+        user.name = name;
+        await BlogScheam.updateMany({ 'user._id': userId }, { 'user.name': name });
+      }
       console.log({ userAfterEdit: user });
       await user.save();
 
