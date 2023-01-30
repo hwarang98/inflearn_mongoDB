@@ -6,7 +6,7 @@ const test = async () => {
   console.time('성능 측정: ');
   const blogsList = await axios.get(`${URL}/blog`);
   let blogs = blogsList.data.blog;
-  console.dir(blogs[3], { depth: 10 });
+  // console.dir(blogs[3], { depth: 10 });
 
   // blogs = await Promise.all(
   //   blogs.map(async (blog) => {
@@ -32,10 +32,10 @@ const test = async () => {
 
 const testGroup = async () => {
   await test();
-  // await test();
-  // await test();
-  // await test();
-  // await test();
+  await test();
+  await test();
+  await test();
+  await test();
 };
 
 testGroup();

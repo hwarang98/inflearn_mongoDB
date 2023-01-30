@@ -2,7 +2,7 @@ import { faker } from '@faker-js/faker';
 import { UserScheam } from './src/models/index.js';
 import axios from 'axios';
 
-const URI = 'http://localhost:3000';
+const URI = 'http://localhost:8080';
 
 const generateFakeData = async (userCount, blogsPerUser, commentsPerUser) => {
   try {
@@ -13,7 +13,7 @@ const generateFakeData = async (userCount, blogsPerUser, commentsPerUser) => {
       throw new Error('commentsPerUser must be a positive integer');
     let users = [];
     let blogs = [];
-    let comments = [];
+    let comment = [];
 
     for (let i = 0; i < userCount; i++) {
       users.push(
@@ -40,7 +40,7 @@ const generateFakeData = async (userCount, blogsPerUser, commentsPerUser) => {
           axios.post(`${URI}/blog`, {
             title: faker.lorem.words(),
             content: faker.lorem.paragraphs(),
-            islive: true,
+            isLive: true,
             userId: user.id,
           })
         );
@@ -53,7 +53,7 @@ const generateFakeData = async (userCount, blogsPerUser, commentsPerUser) => {
     users.map((user) => {
       for (let i = 0; i < commentsPerUser; i++) {
         let index = Math.floor(Math.random() * blogs.length);
-        comments.push(
+        comment.push(
           axios.post(`${URI}/blog/${newBlogs[index].data.blog._id}/comment`, {
             content: faker.lorem.sentence(),
             userId: user.id,
@@ -62,8 +62,8 @@ const generateFakeData = async (userCount, blogsPerUser, commentsPerUser) => {
       }
     });
 
-    await Promise.all(comments);
-    console.log(`${comments.length} fake comments generated!`);
+    await Promise.all(comment);
+    console.log(`${comment.length} fake comment generated!`);
     console.log('COMPLETE!!');
   } catch (err) {
     console.log(err);

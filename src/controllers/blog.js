@@ -6,7 +6,7 @@ export default {
     try {
       const blog = await BlogScheam.find({})
         .limit(20)
-        .populate([{ path: 'user' }, { path: 'comments', populate: { path: 'user' } }]);
+        .populate([{ path: 'user' }, { path: 'comment', populate: { path: 'user' } }]);
       return res.send({ blog });
     } catch (error) {
       console.log(error);
