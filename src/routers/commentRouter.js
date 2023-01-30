@@ -7,4 +7,6 @@ commentRouter.get('/', commentController.getComment);
 
 commentRouter.post('/', commentController.postBlog);
 
+commentRouter.patch('/:commentId', commentController.patchBlog);
+
 export default commentRouter;

@@ -31,4 +31,21 @@ export default {
       return res.status(400).send({ error: error.message });
     }
   },
+
+  async patchBlog(req, res) {
+    try {
+      const { commentId } = req.params;
+      const { content } = req.body;
+
+      if (typeof content !== 'string') return res.status(400).send({ error: 'content는 필수입니다' });
+
+      const [comment] = await Promise.all([
+        CommentScheam.findOneAndUpdate({ _id: commentId }, { content }, { new: true }),
+        Blog.updateOne({ 'comment._id': commentId }, { 'comment.$.content': content }),
+      ]);
+      return res.send({ comment });
+    } catch (error) {
+      return res.status(400).send({ error: error.message });
+    }
+  },
 };
