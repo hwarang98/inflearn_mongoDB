@@ -5,8 +5,9 @@ export default {
   async getAllBlog(req, res) {
     try {
       const blog = await BlogScheam.find({})
-        .limit(20)
+        .limit(1)
         .populate([{ path: 'user' }, { path: 'comment', populate: { path: 'user' } }]);
+      console.log(blog);
       return res.send({ blog });
     } catch (error) {
       console.log(error);

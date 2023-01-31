@@ -85,7 +85,14 @@ export default {
       if (age) user.age = age;
       if (name) {
         user.name = name;
-        await BlogScheam.updateMany({ 'user._id': userId }, { 'user.name': name });
+        await Promise.all([
+          BlogScheam.updateMany({ 'user._id': userId }, { 'user.name': name }),
+          BlogScheam.updateMany(
+            {},
+            { 'comment.$[comment].userFullName': `${name.first} ${name.last}` },
+            { arrayFilters: [{ 'comment.user': userId }] }
+          ),
+        ]);
       }
       console.log({ userAfterEdit: user });
       await user.save();
