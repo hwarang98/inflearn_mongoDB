@@ -11,7 +11,7 @@ export default {
     return res.send({ comments });
   },
 
-  async postBlog(req, res) {
+  async postComment(req, res) {
     try {
       const { blogId } = req.params;
       const { content, userId } = req.body;
@@ -32,7 +32,7 @@ export default {
     }
   },
 
-  async patchBlog(req, res) {
+  async patchComment(req, res) {
     try {
       const { commentId } = req.params;
       const { content } = req.body;
@@ -47,5 +47,14 @@ export default {
     } catch (error) {
       return res.status(400).send({ error: error.message });
     }
+  },
+
+  async deleteComment(req, res) {
+    const { commentId } = req.params;
+    const comment = await CommentScheam.findByIdAndDelete({ _id: commentId });
+
+    await BlogScheam.updateOne({ 'comment._id': commentId }, { $pull: { comment: { _id: commentId } } });
+
+    return res.send({ comment });
   },
 };

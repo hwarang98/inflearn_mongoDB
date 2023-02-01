@@ -5,8 +5,10 @@ const commentRouter = Router({ mergeParams: true });
 
 commentRouter.get('/', commentController.getComment);
 
-commentRouter.post('/', commentController.postBlog);
+commentRouter.post('/', commentController.postComment);
 
-commentRouter.patch('/:commentId', commentController.patchBlog);
+commentRouter.patch('/:commentId', commentController.patchComment);
+
+commentRouter.delete('/:commentId', commentController.deleteComment);
 
 export default commentRouter;
