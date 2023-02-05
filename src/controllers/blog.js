@@ -4,10 +4,15 @@ import { UserScheam, BlogScheam } from '../models/index.js';
 export default {
   async getAllBlog(req, res) {
     try {
+      let { page } = req.query;
+      page = parseInt(page);
+      console.log(page);
       const blog = await BlogScheam.find({})
-        .limit(1)
-        .populate([{ path: 'user' }, { path: 'comment', populate: { path: 'user' } }]);
-      console.log(blog);
+        .sort({ updatedAt: -1 })
+        .skip((page - 1) * 3)
+        .limit(200);
+      // .populate([{ path: 'user' }, { path: 'comment', populate: { path: 'user' } }]);
+
       return res.send({ blog });
     } catch (error) {
       console.log(error);
