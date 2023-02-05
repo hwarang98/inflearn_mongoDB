@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import UserService from '../service/user.js';
-import { UserScheam, BlogScheam } from '../models/index.js';
+import { UserScheam, BlogScheam, CommentScheam } from '../models/index.js';
 
 export default {
   async getUser(req, res) {
@@ -55,9 +55,12 @@ export default {
       const user = new UserService();
       const { userId } = req.params;
 
-      const userDelete = await user.deleteUserById(userId);
-      if (userDelete === null) return 'userId를 확인해주세요.';
-
+      const [userDelete] = await Promise.all([
+        user.deleteUserById(userId),
+        BlogScheam.deleteMany({ 'user._id': userId }),
+        BlogScheam.updateMany({ 'comment.user': userId }, { $pull: { comment: { user: userId } } }),
+        CommentScheam.updateMany({ user: userId }),
+      ]);
       return res.send({ userDelete });
     } catch (error) {
       console.log(error);
