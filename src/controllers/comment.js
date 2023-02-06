@@ -4,10 +4,15 @@ import Blog from '../models/Blog.js';
 
 export default {
   async getComment(req, res) {
+    let { page } = req.qeury;
+    page = parseInt(page);
     const { blogId } = req.params;
     if (!isValidObjectId(blogId)) return res.status(400).send({ error: 'blogId를 확인해주세요.' });
-    console.log(req.params);
-    const comments = await CommentScheam.find({ blog: blogId }).limit(1);
+
+    const comments = await CommentScheam.find({ blog: blogId })
+      .sort({ createAt: -1 })
+      .skip(page * 3)
+      .limit(3);
     return res.send({ comments });
   },
 
@@ -25,7 +30,9 @@ export default {
       if (!blog.isLive) return res.status(400).send({ error: 'blog가 비공개 되어있습니다.' });
       const comment = new CommentScheam({ content, user, userFullName: `${user.name.first} ${user.name.last}`, blog });
 
-      await Promise.all([comment.save(), Blog.updateOne({ _id: blogId }, { $push: { comment: comment } })]);
+      // await Promise.all([comment.save(), Blog.updateOne({ _id: blogId }, { $push: { comment: comment } })]);
+
+      await Promise.all([comment.save(), BlogScheam.updateOne({ _id: blogId }, { $inc: { commentCount: 1 } })]);
       return res.send({ comment });
     } catch (error) {
       return res.status(400).send({ error: error.message });

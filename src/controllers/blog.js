@@ -1,17 +1,19 @@
 import { isValidObjectId } from 'mongoose';
-import { UserScheam, BlogScheam } from '../models/index.js';
+import { UserScheam, BlogScheam, CommentScheam } from '../models/index.js';
 
 export default {
   async getAllBlog(req, res) {
     try {
       let { page } = req.query;
       page = parseInt(page);
-      console.log(page);
-      const blog = await BlogScheam.find({})
-        .sort({ updatedAt: -1 })
-        .skip((page - 1) * 3)
-        .limit(200);
-      // .populate([{ path: 'user' }, { path: 'comment', populate: { path: 'user' } }]);
+
+      const blog = await BlogScheam.find({}).populate([
+        { path: 'user' },
+        { path: 'comment', populate: { path: 'user' } },
+      ]);
+      // .sort({ updatedAt: -1 })
+      // .skip((page - 1) * 3)
+      // .limit(200);
 
       return res.send({ blog });
     } catch (error) {
@@ -26,8 +28,10 @@ export default {
       if (!isValidObjectId(blogId)) {
         return res.status(400).send({ error: 'blogId를 확인해주세요.' });
       }
+
       const blog = await BlogScheam.findById({ _id: blogId });
-      return res.send({ blog });
+
+      return res.send({ blog, commnetCount });
     } catch (error) {
       console.log(error);
       res.status(500).send({ error: error.message });
@@ -45,7 +49,7 @@ export default {
       const user = await UserScheam.findById(userId);
       if (!user) res.status(400).send({ error: '해당 유저가 존재하지 않습니다.' });
 
-      const blog = new BlogScheam({ ...req.body, user });
+      const blog = new BlogScheam({ ...req.body, user: user.toObject() });
       await blog.save();
       return res.send({ blog });
     } catch (error) {
