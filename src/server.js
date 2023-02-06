@@ -1,8 +1,7 @@
 import Express from 'express';
 import mongoose from 'mongoose';
 import router from './routers/index.js';
-// import generateFakeData from '../faker2.js';
-import generateFakeData from '../faker.js';
+import generateFakeData from '../faker2.js';
 
 const app = Express();
 const port = 8080;
@@ -18,12 +17,14 @@ const server = async () => {
 
     console.log('MongoDB 연결 성공');
 
+    app.use(Express.json());
+    app.use(Express.urlencoded({ extended: false }));
+
     app.use(router);
 
     app.listen(port, async () => {
       console.log(`server listening on port ${port}`);
-
-      // await generateFakeData(100000, 10, 50);
+      // await generateFakeData(10, 10,   10);
     });
   } catch (error) {
     throw error;
