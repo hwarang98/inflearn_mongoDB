@@ -24,7 +24,9 @@ const server = async () => {
 
     app.listen(port, async () => {
       console.log(`server listening on port ${port}`);
-      // await generateFakeData(10, 10,   10);
+      console.time('insert Time: ');
+      // await generateFakeData(10, 2, 10);
+      console.timeEnd('insert Time: ');
     });
   } catch (error) {
     throw error;
