@@ -2,18 +2,21 @@ import Express from 'express';
 import mongoose from 'mongoose';
 import router from './routers/index.js';
 import generateFakeData from '../faker2.js';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const app = Express();
 const port = 8080;
 
-const MONGO_URL =
-  'mongodb+srv://hwarang:rmawjdrn12@mongodbtutorlal.yty5hfi.mongodb.net/BlogService?retryWrites=true&w=majority';
-
 const server = async () => {
   try {
+    const { MONGO_URI } = process.env;
+    if (!MONGO_URI) throw new Error('MONGO_URI를 확인해주세요.');
+
     mongoose.set('strictQuery', false);
     // mongoose.set('debug', true);
-    await mongoose.connect(MONGO_URL);
+    await mongoose.connect(MONGO_URI);
 
     console.log('MongoDB 연결 성공');
 
